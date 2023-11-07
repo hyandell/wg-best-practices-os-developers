@@ -13,7 +13,7 @@ This document focuses on recommended options for the GNU Compiler Collection (GC
 
 **TL;DR: What compiler options should I use?**
 
-When compiling C or C++ code on compilers such as GCC and clang, turn on these flags for detecting vulnerabilities at compile time and enable run-time protection mechanisms:
+When compiling C or C++ executables on compilers such as GCC and clang, turn on these flags for detecting vulnerabilities at compile time and enable run-time protection mechanisms:
 
 ~~~~sh
 -O2 -Wall -Wformat=2 -Wconversion -Wtrampolines -Wimplicit-fallthrough \
@@ -22,7 +22,18 @@ When compiling C or C++ code on compilers such as GCC and clang, turn on these f
 -fstack-clash-protection -fstack-protector-strong \
 -Wl,-z,nodlopen -Wl,-z,noexecstack \
 -Wl,-z,relro -Wl,-z,now \
--fPIE -pie -fPIC -shared
+-fPIE -pie
+~~~~
+
+When compiling C or C++ shared libraries, turn on these flags:
+
+~~~~sh
+-O2 -Wall -Wformat=2 -Wconversion -Wtrampolines -Wimplicit-fallthrough \
+-D_FORTIFY_SOURCE=3 \
+-D_GLIBCXX_ASSERTIONS \
+-fstack-clash-protection -fstack-protector-strong \
+-Wl,-z,nodlopen -Wl,-z,noexecstack \
+-fPIC -shared
 ~~~~
 
 Developers should additionally use [`-Werror`](#-Werror), but it is advisable to omit it when distributing source code, as `-Werror` creates a dependency on specific toolchain vendors and versions.
